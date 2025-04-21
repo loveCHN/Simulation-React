@@ -1,8 +1,8 @@
-# Big-React
+# Simulation-React
 
 ## 项目介绍
 
-Big-React是一个从零开始实现的React框架核心功能的项目。该项目旨在深入理解React的工作原理，包括虚拟DOM、Fiber架构、Hooks机制、并发渲染等核心概念和实现细节。
+Simulation-React是一个从零开始实现的React框架核心功能的项目。该项目旨在深入理解React的工作原理，包括虚拟DOM、Fiber架构、Hooks机制、并发渲染等核心概念和实现细节。
 
 ## 项目目标
 
