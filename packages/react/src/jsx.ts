@@ -1,6 +1,6 @@
 import { REACT_ELEMENT_TYPE } from 'shared/ReactSymbols';
 import type {
-  ReactElement,
+  ReactElementType,
   Key,
   Props,
   Ref,
@@ -12,8 +12,8 @@ const ReactElement = function (
   key: Key,
   ref: Ref,
   props: Props
-): ReactElement {
-  const element: ReactElement = {
+): ReactElementType {
+  const element: ReactElementType = {
     $$typeof: REACT_ELEMENT_TYPE,
     type,
     key,
@@ -41,7 +41,7 @@ export const jsx = (type: ElementType, config: any, ...maybeChindren: any) => {
       }
       continue;
     }
-    if ({}.hasOwnProperty.call(config, prop)) {
+    if (Object.prototype.hasOwnProperty.call(config, prop)) {
       props[prop] = val;
     }
   }
