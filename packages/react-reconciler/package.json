@@ -1,11 +1,14 @@
 {
-  "name": "shared",
+  "name": "react-reconciler",
+  "description": "React 协调",
   "version": "1.0.0",
-  "description": "公共辅助方法及类型定义",
+  "module": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "main": "index.ts",
+  "dependencies": {
+    "shared": "workspace:*"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"

@@ -2,13 +2,9 @@
   "name": "react",
   "version": "1.0.0",
   "description": "react公用方法",
-  "main": "index.js",
   "module": "index.ts",
   "dependencies": {
-    "shared":"workspace:*"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "shared": "workspace:*"
   },
   "keywords": [],
   "author": "",

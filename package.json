@@ -9,7 +9,9 @@
     "lint:fix": "eslint . --ext .js,.ts,.jsx,.tsx --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "build:dev": "rimraf dist && rollup --bundleConfigAsCjs --config scripts/rollup/react.config.js"
+    "build:dev": "rimraf dist && rollup --bundleConfigAsCjs --config scripts/rollup/react.config.js --watch",
+    "build:prod": "rimraf dist && rollup --bundleConfigAsCjs --config scripts/rollup/react.config.js",
+    "playground": "cd playground/vite-react-demo && pnpm run dev"
   },
   "type": "module",
   "keywords": [],
