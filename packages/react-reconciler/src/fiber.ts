@@ -1,5 +1,5 @@
-import { Props, Key, Ref } from 'shared/ReactTypes';
-import { WorkTag } from './workTags';
+import { Props, Key, Ref, ReactElementType } from 'shared/ReactTypes';
+import { FunctionComponent, HostComponent, WorkTag } from './workTags';
 import { NoFlags, Flags } from './fiberFlags';
 import { Container } from 'hostConfig';
 export class FiberNode {
@@ -89,4 +89,17 @@ export function createWorkInProgress(
   wip.memoizedState = current.memoizedState;
   wip.memoizedProps = current.memoizedProps;
   return wip;
+}
+export function createFiberFromElement(element: ReactElementType) {
+  const { type, key, props } = element;
+  let fiberTag: WorkTag = FunctionComponent;
+  if (typeof type === 'string') {
+    //<div/> type: 'div'
+    fiberTag = HostComponent;
+  } else if (typeof type !== 'function' && __DEV__) {
+    console.warn('未知的虚拟DOM类型', element);
+  }
+  const fiber = new FiberNode(fiberTag, props, key);
+  fiber.type = type;
+  return fiber;
 }

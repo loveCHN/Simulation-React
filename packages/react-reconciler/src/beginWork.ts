@@ -2,7 +2,7 @@ import { FiberNode } from './fiber';
 import { HostRoot, HostComponent, HostText } from './workTags';
 import { UpdateQueue, processUpdateQueue } from './updateQueue';
 import { ReactElementType } from 'shared';
-
+import { reconcileChildFibers, mountChildFibers } from './childFibers';
 /**
  * 递归中的递阶段
  * 比较、返回子fiberNode
@@ -13,7 +13,7 @@ export function beginWork(wip: FiberNode): FiberNode | null {
     case HostRoot:
       return updateHostRoot(wip);
     case HostComponent:
-      return null;
+      return updateHostComponent(wip);
     case HostText:
       return null;
     default:
@@ -47,4 +47,20 @@ function updateHostRoot(wip: FiberNode) {
   reconcileChildren(wip, nextChildren);
   // 返回子fiber节点
   return wip.child;
+}
+function updateHostComponent(wip: FiberNode) {
+  const nextProps = wip.pendingProps;
+  const nextChildren = nextProps.children;
+  reconcileChildren(wip, nextChildren);
+  return wip.child;
+}
+function reconcileChildren(wip: FiberNode, children?: ReactElementType) {
+  const current = wip.alternate;
+  if (current !== null) {
+    //update
+    wip.child = reconcileChildFibers(wip, current.child, children);
+  } else {
+    //mount
+    wip.child = mountChildFibers(wip, null, children);
+  }
 }
