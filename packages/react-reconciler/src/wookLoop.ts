@@ -3,7 +3,8 @@
 
 import { beginWork } from './beginWork'; // 引入 beginWork 函数，用于构建或更新当前 Fiber 的子树
 import { completeWork } from './completeWork'; // 引入 completeWork 函数，用于在子树完成后进行清理或提交
-import { FiberNode } from './fiber'; // 引入 FiberNode 类型，表示 Fiber 树的节点
+import { FiberNode, FiberRootNode, createWorkInProgress } from './fiber'; // 引入 FiberNode 类型，表示 Fiber 树的节点
+import { HostRoot } from './workTags';
 
 // 当前正在处理的工作单元（Fiber）
 let workInProgress: FiberNode | null = null;
@@ -12,8 +13,32 @@ let workInProgress: FiberNode | null = null;
  * 将 workInProgress 指向渲染根节点，开始构建新的 Fiber 树
  * @param {FiberNode} fiber - 渲染的根 Fiber
  */
-function prepareFreshStack(fiber: FiberNode) {
-  workInProgress = fiber; // 初始化工作栈，指向根节点
+function prepareFreshStack(root: FiberRootNode) {
+  //root.current是hostRootFiber
+  //prepareFreshStack是用于初始化workInProgress
+  workInProgress = createWorkInProgress(root.current, {}); // 初始化工作栈，指向根节点
+}
+
+export function scheduleUpdateOnFiber(fiber: FiberNode) {
+  //调度功能
+  //从当前fiber节点找到根节点
+  const root = markUpdateFromFiberToRoot(fiber);
+  //从根节点开始调度
+  renderRoot(root);
+}
+
+function markUpdateFromFiberToRoot(fiber: FiberNode) {
+  let node = fiber;
+  let parent = node.return;
+  while (parent !== null) {
+    node = parent;
+    parent = node.return;
+  }
+  if (node.tag === HostRoot) {
+    //HostRoot 的stateNode 是 FiberRootNode
+    return node.stateNode;
+  }
+  return null;
 }
 
 /**
