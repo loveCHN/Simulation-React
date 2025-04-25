@@ -43,9 +43,9 @@ function markUpdateFromFiberToRoot(fiber: FiberNode) {
 
 /**
  * 渲染入口，驱动整个调度与工作循环
- * @param {FiberNode} root - 应渲染的根 Fiber
+ * @param {FiberRootNode} root - 应渲染的根 Fiber
  */
-function renderRoot(root: FiberNode) {
+function renderRoot(root: FiberRootNode) {
   // 1. 初始化工作栈
   prepareFreshStack(root);
   // 2. 执行工作循环，遇到异常可重试
@@ -58,6 +58,12 @@ function renderRoot(root: FiberNode) {
       workInProgress = null; // 遇错后重置状态，准备下次重试
     }
   } while (true);
+  //递归流程结束 我们拿到了在内存中创建好的wip树
+  const finishedWork = root.current.alternate;
+  root.finishedWork = finishedWork;
+  //commit阶段
+  //根据wipfiber树，及树中的flags，进行DOM操作
+  // commitRoot(root);
 }
 
 /**

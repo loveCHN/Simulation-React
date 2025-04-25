@@ -8,7 +8,7 @@ import {
   UpdateQueue
 } from './updateQueue';
 import { ReactElementType } from 'shared';
-import { scheduleUpdateOnFiber } from './wookLoop';
+import { scheduleUpdateOnFiber } from './workLoop';
 /**
  * 执行reactdom.createRoot(rootElement)时调用
  */
