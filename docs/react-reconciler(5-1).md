@@ -80,9 +80,36 @@ update时，更新出来的fiber会触发（shouldTrackEffects && fiber.alternat
 
 ### completeWork
 
-`completeWork`是归阶段 构建 DOM 树（离屏 DOM），并完成一些 side effect 的收集
+1. 对于Host类型fiberNode:构建离屏DOM树
+2. 标记Update flag(ToDo)
+3. flag冒泡
+<!--
+4. 为 HostComponent（原生 DOM 元素）创建 DOM。
+5. 为 HostText 创建文本节点。
+6. 调用 appendAllChildren 把子节点挂到对应的 DOM 上。
+7. 把 DOM 挂到当前 Fiber 的 stateNode 上，为 commit 阶段做准备。 -->
 
-1. 为 HostComponent（原生 DOM 元素）创建 DOM。
-2. 为 HostText 创建文本节点。
-3. 调用 appendAllChildren 把子节点挂到对应的 DOM 上。
-4. 把 DOM 挂到当前 Fiber 的 stateNode 上，为 commit 阶段做准备。
+#### 对于Host类型fiberNode:构建离屏DOM树
+
+首先根据wip.tag，调用不同的`complete`函数
+调用`createInstance(wip.type, newProps)`，创建DOM
+调用`appendAllChildren(instance, wip)`，把子节点挂到对应的 DOM 上
+`appendAllChildren(instance, wip)`会递归的把子节点挂到对应的 DOM 上，由于有兄弟节点，所以递归的添加的过程很像`recconcile`的递和归  
+把 DOM 挂到当前 Fiber 的 stateNode 上，为 commit 阶段做准备
+
+#### flags冒泡
+
+`bubbleProperties(wip)`会收集子节点的flags 以及子节点收集过的flags（subtreeFlags）
+还会收集子节点兄弟节点的flags
+此时 wip 的 subtreeFlags就是wip的子树的所有flags
+
+### workLoop结束
+
+此时 递阶段和归阶段结束
+我们拿到了在内存中创建好的wip树（root.current.alternate）
+并且把wip赋值给root.finishedWork
+至此 reconciler阶段结束,进入commit阶段
+
+```js
+commitRoot(root);
+```

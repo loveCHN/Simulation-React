@@ -7,3 +7,5 @@ export const Placement = 0b000010;
 export const Update = 0b000100;
 
 export const ChildDeletion = 0b001000;
+
+export const MutationMask = Placement | Update | ChildDeletion;
