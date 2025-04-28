@@ -128,7 +128,7 @@ function performUnitOfWork(fiber: FiberNode) {
 function completeUnitOfWork(fiber: FiberNode) {
   let node: FiberNode | null = fiber;
   do {
-    // 1. 调用 completeWork 处理当前节点的“归”阶段。
+    // 1. 调用 completeWork 处理当前节点的"归"阶段。
     //    completeWork 负责处理该节点的副作用（如准备 DOM 更新），
     //    并将子节点的副作用信息冒泡到当前节点。
     completeWork(node);
@@ -137,7 +137,7 @@ function completeUnitOfWork(fiber: FiberNode) {
 
     // 3. 如果存在兄弟节点。
     if (sibling !== null) {
-      // 将 workInProgress 指向兄弟节点，工作循环将从这个兄弟节点开始新的“递”阶段。
+      // 将 workInProgress 指向兄弟节点，工作循环将从这个兄弟节点开始新的"递"阶段。
       workInProgress = sibling;
       // 找到下一个工作单元（兄弟节点），结束当前 completeUnitOfWork 函数。
       return;
@@ -146,4 +146,5 @@ function completeUnitOfWork(fiber: FiberNode) {
     node = node.return;
   } while (node !== null);
   // 当 node 为 null 时，表示完成了整个树的遍历
+  workInProgress = null;
 }

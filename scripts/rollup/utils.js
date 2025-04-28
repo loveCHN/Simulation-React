@@ -22,6 +22,9 @@ export function getPackageJSON(pkgName) {
 }
 
 export function getBaseRollupPlugins(pluginConfig = {}) {
-  const { typescript = {}, alias = { __DEV__: true } } = pluginConfig;
+  const {
+    typescript = {},
+    alias = { __DEV__: true, preventAssignment: true }
+  } = pluginConfig;
   return [replace(alias), cjs(), ts(typescript)];
 }

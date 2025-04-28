@@ -12,15 +12,14 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "noEmit": false,
-    "declaration": true,
-    "declarationMap": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "declaration": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noImplicitReturns": false,
     "skipLibCheck": true,
     "baseUrl": "./packages",
     "paths": {
-      "hostConfig": ["./react-reconciler/src/hostConfig.ts"]
+      "hostConfig": ["./react-dom/src/hostConfig.ts"]
     }
   },
   "exclude": ["playground", "**/node_modules"]
