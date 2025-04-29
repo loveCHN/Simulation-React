@@ -11,7 +11,7 @@
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "build:dev": "rimraf dist && rollup --bundleConfigAsCjs --config scripts/rollup/dev.config.js --watch",
     "build:prod": "rimraf dist && rollup --bundleConfigAsCjs --config scripts/rollup/dev.config.js",
-    "playground": "cd playground/vite-react-demo && pnpm run dev"
+    "playground": "pnpm build:prod && cd playground/vite-react-demo && pnpm run dev"
   },
   "type": "module",
   "keywords": [],
