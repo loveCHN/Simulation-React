@@ -1,7 +1,13 @@
 import internals from 'shared/internals';
 import { FiberNode } from './fiber';
 import { Dispatch, Dispatcher } from 'react/src/currentDispatcher';
-import { createUpdateQueue } from './updateQueue';
+import {
+  createUpdate,
+  createUpdateQueue,
+  enqueueUpdate,
+  UpdateQueue
+} from './updateQueue';
+import { scheduleUpdateOnFiber } from './workLoop';
 /**
  * 当前正在渲染的 Fiber 节点
  */
@@ -28,6 +34,7 @@ export function renderWithHooks(wip: FiberNode) {
     //mount
     currentDispatcher.current = HooksDispatcherOnMount;
   }
+  // wip.type 是function函数
   const Component = wip.type;
   const props = wip.pendingProps;
   const children = Component(props);
@@ -49,11 +56,28 @@ function mountState<State>(
   } else {
     memoizedState = initialState;
   }
+  //这里注意 创建的是更新的链表 而不是单个更新对象
   const queue = createUpdateQueue<State>();
   hook.updateQueue = queue;
+  hook.memoizedState = memoizedState;
   //下一步 我们需要一个dispach 他需要接入现有的更新流程
-  //第二天需要先梳理一下代码 再实现
+  //@ts-ignore
+  const dispatch = dispatchSetState.bind(null, currentlyRenderingFiber!, queue);
+  queue.dispatch = dispatch;
   return [memoizedState, dispatch];
+}
+function dispatchSetState<State>(
+  fiber: FiberNode,
+  queue: UpdateQueue<State>,
+  action: State
+) {
+  //和hostroot相同
+  //创建更新
+  const update = createUpdate(action);
+  //入队
+  enqueueUpdate(queue, update);
+  //调度更新
+  scheduleUpdateOnFiber(fiber);
 }
 /**
  * 1. 创建hook

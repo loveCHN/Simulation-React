@@ -1,6 +1,12 @@
-import { appendChildToContainer, Container } from 'hostConfig';
+import { appendChildToContainer, Container, commitUpdate } from 'hostConfig';
 import { FiberNode, FiberRootNode } from './fiber';
-import { MutationMask, NoFlags, Placement } from './fiberFlags';
+import {
+  ChildDeletion,
+  MutationMask,
+  NoFlags,
+  Placement,
+  Update
+} from './fiberFlags';
 import { HostComponent, HostRoot, HostText } from './workTags';
 let nextEffect: FiberNode | null = null;
 export function commitMutationEffects(finishedWork: FiberNode) {
@@ -38,9 +44,29 @@ function commitMutationEffectsOnFiber(finishedWork: FiberNode) {
     commitPlacement(finishedWork);
     finishedWork.flags &= ~Placement;
   }
-  //flags中存在Deletion相关操作
+  //flags中存在Update相关操作
+  if ((flags & Update) !== NoFlags) {
+    commitUpdate(finishedWork);
+    finishedWork.flags &= ~Update;
+  }
   //flags中存在ChildDeletion相关操作
+  if ((flags & ChildDeletion) !== NoFlags) {
+    const deletions = finishedWork.deletions;
+    if (deletions !== null) {
+      deletions.forEach(childToDelete => {
+        //每次遍历的childToDelete 都是要被删除的fiber
+        commitDeletion(childToDelete);
+      });
+    }
+  }
 }
+/**
+ * @description 处理打上ChildDeletion tag的fiber节点
+ * @description 对于FC,需要处理useEffect unmount执行
+ * @description 对于HostComponent,.需要解绑ref
+ * @description 对于子树的根HostComponent，需要移除DOM
+ */
+function commitDeletion(childToDelete: FiberNode) {}
 function commitPlacement(finishedWork: FiberNode) {
   // parent Dom(要将当前的节点插入到谁下面)
   // finishedWork（拿到对应的dom节点）

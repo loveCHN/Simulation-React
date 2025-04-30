@@ -13,13 +13,13 @@ export default [
     output: [
       {
         file: `${pkgDistPath}/index.js`,
-        name: 'index.js',
+        name: 'index',
         format: 'esm'
       },
       //兼容react-dom/client
       {
         file: `${pkgDistPath}/client.js`,
-        name: 'client.js',
+        name: 'client',
         format: 'esm'
       }
     ],
@@ -45,5 +45,18 @@ export default [
       })
     ],
     external: [...Object.keys(peerDependencies)]
+  },
+  //react-test-utils
+  {
+    input: `${pkgPath}/test-utils.ts`,
+    output: [
+      {
+        file: `${pkgDistPath}/test-utils.js`,
+        name: 'testUtils',
+        format: 'umd'
+      }
+    ],
+    plugins: [...getBaseRollupPlugins()],
+    external: ['react', 'react-dom']
   }
 ];

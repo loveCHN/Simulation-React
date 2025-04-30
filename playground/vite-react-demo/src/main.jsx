@@ -1,11 +1,12 @@
 import ReactDOM from 'react-dom';
-import React from 'react';
+import React, { useState } from 'react';
 // import App from './App.jsx';
 const App = () => {
+  const [count, setCount] = useState(0);
   return (
     <div>
       <h1>
-        <span>123</span>
+        <span>{count}</span>
       </h1>
     </div>
   );

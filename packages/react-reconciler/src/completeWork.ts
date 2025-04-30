@@ -12,8 +12,10 @@ import {
   HostText,
   FunctionComponent
 } from './workTags';
-import { NoFlags } from './fiberFlags';
-
+import { NoFlags, Update } from './fiberFlags';
+function markUpdate(fiber: FiberNode) {
+  fiber.flags |= Update;
+}
 /**
  * 递归中的归阶段
  */
@@ -41,6 +43,12 @@ export function completeWork(wip: FiberNode) {
       if (current !== null && wip.stateNode) {
         //wip.stateNode 是fiber的dom节点
         //update
+        const oldText = current.memoizedProps.content;
+        const newText = newProps.content;
+        if (oldText !== newText) {
+          //更新
+          markUpdate(wip);
+        }
       } else {
         //mount
         // 1.构建dom
