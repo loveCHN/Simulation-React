@@ -77,6 +77,7 @@ function dispatchSetState<State>(
   //入队
   enqueueUpdate(queue, update);
   //调度更新
+
   scheduleUpdateOnFiber(fiber);
 }
 /**

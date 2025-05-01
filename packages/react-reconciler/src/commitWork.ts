@@ -1,4 +1,9 @@
-import { appendChildToContainer, Container, commitUpdate } from 'hostConfig';
+import {
+  appendChildToContainer,
+  Container,
+  commitUpdate,
+  removeChild
+} from 'hostConfig';
 import { FiberNode, FiberRootNode } from './fiber';
 import {
   ChildDeletion,
@@ -7,7 +12,12 @@ import {
   Placement,
   Update
 } from './fiberFlags';
-import { HostComponent, HostRoot, HostText } from './workTags';
+import {
+  FunctionComponent,
+  HostComponent,
+  HostRoot,
+  HostText
+} from './workTags';
 let nextEffect: FiberNode | null = null;
 export function commitMutationEffects(finishedWork: FiberNode) {
   nextEffect = finishedWork;
@@ -60,13 +70,78 @@ function commitMutationEffectsOnFiber(finishedWork: FiberNode) {
     }
   }
 }
+function commitNestedComponent(
+  root: FiberNode,
+  onCommitUnmount: (fiber: FiberNode) => void
+) {
+  let node: FiberNode | null = root;
+  while (true) {
+    onCommitUnmount(node);
+    if (node.child !== null) {
+      //向下遍历
+      node.child.return = node;
+      node = node.child;
+      continue;
+    }
+    if (node === root) {
+      return;
+    }
+    while (node.sibling === null) {
+      if (node.return === null || node.return === root) {
+        return;
+      }
+      //向上遍历
+      node = node.return;
+    }
+    node.sibling.return = node.return;
+    node = node.sibling;
+  }
+}
 /**
  * @description 处理打上ChildDeletion tag的fiber节点
  * @description 对于FC,需要处理useEffect unmount执行
  * @description 对于HostComponent,.需要解绑ref
  * @description 对于子树的根HostComponent，需要移除DOM
  */
-function commitDeletion(childToDelete: FiberNode) {}
+function commitDeletion(childToDelete: FiberNode) {
+  /**
+   * 要从 DOM 中移除的那个 Fiber 对应的「最顶层 DOM 节点」
+   */
+  let rootHostNode: FiberNode | null = null;
+  //递归子树
+  commitNestedComponent(childToDelete, unmountFiber => {
+    switch (unmountFiber.tag) {
+      case HostComponent:
+        if (rootHostNode === null) {
+          rootHostNode = unmountFiber;
+        }
+        //解绑ref Todo
+        break;
+      case HostRoot:
+        if (rootHostNode === null) {
+          rootHostNode = unmountFiber;
+        }
+        break;
+      case FunctionComponent:
+        //TODO useEffect unmount
+        break;
+      default:
+        if (__DEV__) {
+          console.warn('未处理的unmount类型', unmountFiber);
+        }
+        break;
+    }
+    if (rootHostNode !== null) {
+      const hostParent = getHostParent(unmountFiber);
+      if (hostParent !== null) {
+        //移除rootHostComponent的Dom
+        removeChild(rootHostNode, hostParent);
+      }
+    }
+    childToDelete.return = null;
+    childToDelete.child = null;
+  });
+}
 function commitPlacement(finishedWork: FiberNode) {
   // parent Dom(要将当前的节点插入到谁下面)
   // finishedWork（拿到对应的dom节点）

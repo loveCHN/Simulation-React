@@ -50,7 +50,7 @@ function updateHostRoot(wip: FiberNode) {
   // 将新的状态保存到fiber节点的memoizedState属性
   //此时 这个hostRootFiber的memoizedState 是ReactElement：<App/>
   wip.memoizedState = memoizedState;
-  // 获取子元素
+  // 获取子元素(jsx)
   const nextChildren = wip.memoizedState;
   reconcileChildren(wip, nextChildren);
   // 返回子fiber节点
