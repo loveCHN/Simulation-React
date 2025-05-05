@@ -113,6 +113,7 @@ function commitDeletion(childToDelete: FiberNode) {
     switch (unmountFiber.tag) {
       case HostComponent:
         if (rootHostNode === null) {
+          //如果没有rootHostNode，那么unmountFiber就是rootHostNode
           rootHostNode = unmountFiber;
         }
         //解绑ref Todo
