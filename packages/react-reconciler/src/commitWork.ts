@@ -126,6 +126,8 @@ function commitDeletion(childToDelete: FiberNode) {
       case FunctionComponent:
         //TODO useEffect unmount
         break;
+      case HostText:
+        break;
       default:
         if (__DEV__) {
           console.warn('未处理的unmount类型', unmountFiber);
