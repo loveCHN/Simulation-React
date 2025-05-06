@@ -132,16 +132,19 @@ function commitDeletion(childToDelete: FiberNode) {
         }
         break;
     }
-    if (rootHostNode !== null) {
-      const hostParent = getHostParent(unmountFiber);
-      if (hostParent !== null) {
-        //移除rootHostComponent的Dom
-        removeChild(rootHostNode, hostParent);
-      }
-    }
-    childToDelete.return = null;
-    childToDelete.child = null;
   });
+
+  // 将DOM移除操作移到递归外部，确保只执行一次
+  if (rootHostNode !== null) {
+    const hostParent = getHostParent(childToDelete);
+    if (hostParent !== null) {
+      //移除rootHostComponent的Dom
+      removeChild((rootHostNode as FiberNode).stateNode, hostParent);
+    }
+  }
+
+  childToDelete.return = null;
+  childToDelete.child = null;
 }
 function commitPlacement(finishedWork: FiberNode) {
   // parent Dom(要将当前的节点插入到谁下面)
