@@ -6,12 +6,11 @@ const Child = () => {
 };
 const App = () => {
   const [count, setCount] = useState(0);
-  window.setCount = setCount;
   if (count === 3) {
     return <Child />;
   }
   return (
-    <div>
+    <div onClick={() => setCount(count + 1)}>
       <h1>
         <span>{count}</span>
       </h1>

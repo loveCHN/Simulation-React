@@ -13,6 +13,7 @@ import {
   FunctionComponent
 } from './workTags';
 import { NoFlags, Update } from './fiberFlags';
+import { updateFiberProps, DOMElement } from 'react-dom/src/SyntheticEvent';
 function markUpdate(fiber: FiberNode) {
   fiber.flags |= Update;
 }
@@ -28,6 +29,9 @@ export function completeWork(wip: FiberNode) {
       if (current !== null && wip.stateNode) {
         //wip.stateNode 是fiber的dom节点
         //update
+        //1.判断props是否变化
+        //2.变了：Update flag
+        updateFiberProps(wip.stateNode as DOMElement, newProps);
       } else {
         //mount
         // 1.构建dom
