@@ -1,8 +1,9 @@
-//@ts-ignore
+import { ReactElementType } from 'shared/ReactTypes';
+// @ts-ignore
 import { createRoot } from 'react-dom';
-import { ReactElementType } from 'shared';
 
-export function renderIntoContainer(element: ReactElementType) {
-  const div = document.createElement('div');
-  createRoot(div).render(element);
+export function renderIntoDocument(element: ReactElementType) {
+	const div = document.createElement('div');
+	// element
+	return createRoot(div).render(element);
 }

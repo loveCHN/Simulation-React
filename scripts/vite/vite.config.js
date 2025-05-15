@@ -7,10 +7,11 @@ import replace from '@rollup/plugin-replace';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    react({
-      jsxRuntime: 'classic',
-      jsxImportSource: undefined
-    }),
+    react(),
+    // react({
+    //   jsxRuntime: 'classic',
+    //   jsxImportSource: undefined
+    // }),
     replace({
       __DEV__: true,
       preventAssignment: true

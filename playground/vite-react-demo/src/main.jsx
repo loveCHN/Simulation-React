@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom';
-import React, { useState } from 'react';
+import { useState } from 'react';
 // import App from './App.jsx';
 const Child = () => {
   return <h1>我是child</h1>;
