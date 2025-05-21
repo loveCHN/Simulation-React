@@ -11,13 +11,19 @@ const App = () => {
     return <Child />;
   }
   return (
-    <div onClick={() => setCount(count + 1)}>
-      <ul>
-        {arr.map(item => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <div
+        onClick={() => {
+          setCount(count + 1);
+        }}
+      >
+        <ul>
+          {arr.map(item => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </div>
+    </>
   );
 };
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
