@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs';
-
 import ts from 'rollup-plugin-typescript2';
 import cjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
@@ -26,5 +25,5 @@ export function getBaseRollupPlugins(pluginConfig = {}) {
     typescript = {},
     alias = { __DEV__: true, preventAssignment: true }
   } = pluginConfig;
-  return [replace(alias), cjs(), ts(typescript)];
+  return [cjs(), replace(alias), , ts(typescript)];
 }

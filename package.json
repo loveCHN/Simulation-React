@@ -36,6 +36,10 @@
     "rollup-plugin-generate-package-json": "^3.2.0",
     "rollup-plugin-typescript2": "^0.36.0",
     "typescript": "^5.8.3",
-    "vite": "^6.3.1"
+    "vite": "^6.3.1",
+    "@types/scheduler": "^0.16.2"
+  },
+  "dependencies": {
+    "scheduler": "^0.23.0"
   }
 }

@@ -32,8 +32,8 @@ export default defineConfig({
         replacement: resolve(resolvePkgPath('react-dom'), './src/hostConfig.ts')
       }
     ]
-  },
-  optimizeDeps: {
-    disabled: true
   }
+  // optimizeDeps: {
+  //   disabled: true
+  // }
 });
