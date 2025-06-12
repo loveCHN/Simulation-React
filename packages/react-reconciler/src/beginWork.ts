@@ -23,7 +23,11 @@ export const beginWork = (wip: FiberNode, renderLane: Lane) => {
 		case HostText:
 			return null;
 		case FunctionComponent:
+<<<<<<< HEAD
 			return updateFunctionComponent(wip, renderLane);
+=======
+			return updateFunctionComponent(wip);
+>>>>>>> 8140111715a410f10d88a5e8cb1d1eb11362de00
 		case Fragment:
 			return updateFragment(wip);
 		default:
@@ -37,6 +41,15 @@ export const beginWork = (wip: FiberNode, renderLane: Lane) => {
 
 function updateFragment(wip: FiberNode) {
 	const nextChildren = wip.pendingProps;
+<<<<<<< HEAD
+=======
+	reconcileChildren(wip, nextChildren);
+	return wip.child;
+}
+
+function updateFunctionComponent(wip: FiberNode) {
+	const nextChildren = renderWithHooks(wip);
+>>>>>>> 8140111715a410f10d88a5e8cb1d1eb11362de00
 	reconcileChildren(wip, nextChildren);
 	return wip.child;
 }
